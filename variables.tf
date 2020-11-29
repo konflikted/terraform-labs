@@ -1,6 +1,6 @@
 variable "loc" {
   description = "Default Azure region"
-  default     = "East US"
+  default     = "eastus"
 }
 
 variable "tags" {
@@ -42,54 +42,8 @@ variable "subnetip" {
   }
 }
 
-/*
-resource "azurerm_resource_group" "core" {
-  name      = "core"
-  location  = var.loc
-  tags      = var.tags
+variable "webapplocs" {
+  description = "List of locations for web apps"
+  type        = list(string)
+  default     = []
 }
-
-resource "azurerm_public_ip" "pubip" {
-  name                = "pubip"
-  resource_group_name = azurerm_resource_group.core.name
-  location            = azurerm_resource_group.core.location
-  allocation_method   = "Dynamic"
-  tags                = azurerm_resource_group.core.tags
-}
-
-resource "azurerm_virtual_network" "virtnet" {
-  name                = "virtnet"
-  resource_group_name = azurerm_resource_group.core.name
-  location            = azurerm_resource_group.core.location
-  address_space       = ["10.0.0.0/16"]
-  dns_servers          = ["1.1.1.1", "1.0.0.1"]
-  tags                = azurerm_resource_group.core.tags
-}
-
-resource "azurerm_subnet" "subnets" {
-  count                = length(var.subnets)
-  resource_group_name  = azurerm_resource_group.core.name
-  virtual_network_name = azurerm_virtual_network.virtnet.name
-}
-
-
-resource "azurerm_virtual_network_gateway" "vpnGateway" {
-  name                = "vpnGateway"
-  location            = azurerm_resource_group.core.location
-  resource_group_name = azurerm_resource_group.core.name
-  tags                = azurerm_resource_group.core.tags
-
-  type                = "Vpn"
-  vpn_type            = "RouteBased"
-  
-  sku                 = "Basic"
-  enable_bgp          = true
-
-  ip_configuration {
-    name                          = "vpnGwConfig"
-    public_ip_address_id          = azurerm_public_ip.pubip.id
-    private_ip_address_allocation = "Dynamic"
-    subnet_id                     = azurerm_subnet.subnets.GatewaySubnet.id
-  }
-}
-*/
